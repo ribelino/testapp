@@ -1,60 +1,85 @@
 import React, { Component } from "react";
 import {
-	Image,
-	Icon,
-	ActivityIndicator,
-	StyleSheet,
-	FlatList,
-	Text,
-	View,
-	TouchableHighlight,
-	TouchableOpacity,
-	ScrollView,
-	AppRegistry,
-	TextInput,
-	TouchableWithoutFeedback,
-	Alert,
-	Button
+    Image,
+    Icon,
+    ActivityIndicator,
+    StyleSheet,
+    FlatList,
+    Text,
+    View,
+    TouchableHighlight,
+    TouchableOpacity,
+    ScrollView,
+    AppRegistry,
+    TextInput,
+    TouchableWithoutFeedback,
+    Alert,
+    Button
 } from "react-native";
 
-export default class tripCreation extends React.Component {
-  static navigationOptions = {
-    title: 'CreateTrip',
-  };
+export default class TripCreation extends React.Component {
+    render() {
+        //FUTURE: Will create a random token for a trip ID, without duplication
 
-	render() {
-		//FUTURE: Will create a random token for a trip ID, without duplication
-		//MUST DOOOOOO
+        return (
+            <ScrollView
+                style={{
+                    backgroundColor: "#28B48B"
+                }}
+            >
+                <View>
+                    <TextInput
+                        style={{
+                            height: 60,
+                            color: "White",
+                            fontSize: 27,
+                            marginLeft: 40,
+                            marginRight: 40,
+                            marginTop: 30
+                        }}
+                        underlineColorAndroid="transparent"
+                        placeholder={"Destination"}
+                        onChangeText={text => this.setState({ toID: text })}
+                    />
 
-		return (
-			<View>
-				<TextInput
-					style={{ height: 60, borderColor: "gray", borderWidth: 1 }}
-					placeholder={"Where To?"}
-					onChangeText={text => this.setState({ toID: text })}
-				/>
-				<TextInput
-					style={{ height: 60, borderColor: "gray", borderWidth: 1 }}
-					placeholder={"Frome where?"}
-					onChangeText={text => this.setState({ fromID: text })}
-				/>
-				<Button
-					title={"Go to Trip Preference"}
-					disable={false}
-					onPress={() => {
-						if(this.state.toID === '' || this.state.fromID === ''){
-							Alert.alert('Please fill in both fields, thank you.');
-						} else {
-							this.props.navigation.navigate("TripPreference", {
+                    <TextInput
+                        style={{
+                            height: 60,
+                            fontSize: 27,
+                            marginBottom: 50,
+                            marginLeft: 40,
+                            marginRight: 40,
+                            marginTop: 30
+                        }}
+                        placeholder={"From where?"}
+                        onChangeText={text => this.setState({ fromID: text })}
+                    />
+                    <Button
+                        title={"Go to TripPreference"}
+                        disable={false}
+                        onPress={() => {
+							if(this.state.toID === '' || this.state.fromID === ''){
+								Alert.alert('Please fill in both fields, thank you.');
+							} else {
+								this.props.navigation.navigate("TripPreference", {
 								toID: this.state.toID,
 								fromID: this.state.fromID
 							});
-						}
-					}}
-				/>
-			</View>
-		);
-	}
+							}
+						}}
+							
+                    />
+                    <Button
+                        title={"Calendar"}
+                        disable={false}
+                        onPress={() => {
+                            this.props.navigation.navigate("Calender");
+                        }}
+                    />
+                </View>
+            </ScrollView>
+        );
+    }
 }
 const styles = StyleSheet.create({
 	container: {

@@ -1,17 +1,30 @@
 import React, { Component } from "react";
 import {
+	Image,
+	Icon,
+	ActivityIndicator,
 	StyleSheet,
+	FlatList,
 	Text,
 	View,
+	TouchableHighlight,
 	TouchableOpacity,
+	ScrollView,
+	AppRegistry,
+	TextInput,
+	TouchableWithoutFeedback,
+	Alert,
+	Button
 } from "react-native";
-import { createBottomTabNavigator, createStackNavigator } from "react-navigation";
+import { StackNavigator } from "react-navigation";
+import { List, ListItem } from "react-native-elements";
+import { _ } from "lodash";
+
+
+import { Header, Container, Title, Content, Card, CardItem } from "native-base";
 
 import Expo from "expo";
 import firebase from "firebase";
-
-import MainTabNavigator from '../navigation/MainTabNavigator';
-import HubClass from '../navigation/hubFile';
 
 console.disableYellowBox = true;
 const id = "796882037187132"; //This is the Facebook project ID, do not change
@@ -25,14 +38,10 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-
+var user = firebase.auth().currentUser;
 var database = firebase.database();
 
 export default class LoginScreen extends React.Component {
-	static navigationOptions = {
-		header: null,
-	  };
-
 	login = async () => {
 		const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(
 			id,
@@ -41,10 +50,10 @@ export default class LoginScreen extends React.Component {
 		if (type === "success") {
 			//Handle successful authenticatino here
 			const response = await fetch(
-				`https://graph.facebook.com/me?access_token=${token}&fields=id,name,birthday,picture.type(large)`
+				`https://graph.facebook.com/me?access_token=${token}&fields=id,name,birthday,picture.height(400)`
 			);
 			//const {picture, name, birthday} = await response.json
-			//Alert.alert(`Hi ${(await response.json()).name}!`)
+			//Alert.alert(Hi ${(await response.json()).name}!)
 			const credential = firebase.auth.FacebookAuthProvider.credential(token);
 
 			//currentName = (await response.json().name);
@@ -56,11 +65,11 @@ export default class LoginScreen extends React.Component {
 			console.log(pictureData[2]);
 			const currentName = userData[1];
 			const userID = userData[0];
-			//const profilePicture = `https://graph.facebook.com/${userID}?fields=picture.type(large)`;
+			//const profilePicture = https://graph.facebook.com/${userID}?fields=picture.type(large);
 
 			firebase
 				.auth()
-				.signInAndRetrieveDataWithCredential(credential)
+				.signInWithCredential(credential)
 				.catch(error => {
 					//Handle errors here bonehead
 					console.log(error);
@@ -75,34 +84,35 @@ export default class LoginScreen extends React.Component {
 					name: currentName,
 					pictureURL: profilePicture
 				});
-				this.props.navigation.navigate("Hub");
+
+			this.props.navigation.navigate("Hub");
 		} else {
 			alert(type);
 		}
 	};
 
-	get button() {
-		return (
-			<TouchableOpacity onPress={() => this.login()}>
-				<View
-					style={{
-						width: "50%",
-						borderRadius: 4,
-						padding: 24,
-						backgroundColor: "#2b5998"
-					}}
-				>
-					<Text style={{ color: "white" }}> Login to Facebook </Text>
-				</View>
-			</TouchableOpacity>
-		);
-	}
-
 	render() {
 		return (
 			<View style={styles.container}>
-				<Text style={styles.paragraph}>Welcome to Gonow</Text>
-				{this.button}
+				<Image
+					style={{ height: 207, width: 167, resizeMode: "contain" }}
+					source={require("../assets/logoStacked.jpg")}
+				/>
+				<Text>Find your next travel partner</Text>
+
+				<TouchableOpacity onPress={() => this.login()}>
+					<View
+						style={{
+							width: "50%",
+							borderRadius: 0,
+							padding: 24,
+							color: "#28B48B",
+							backgroundColor: "white"
+						}}
+					>
+						<Text style={{ color: "#28B48B" }}> Login to Facebook </Text>
+					</View>
+				</TouchableOpacity>
 			</View>
 		);
 	}
@@ -111,9 +121,11 @@ export default class LoginScreen extends React.Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#fff",
+		flexDirection: "column",
+
+		backgroundColor: "#28B48B",
 		alignItems: "center",
-		justifyContent: "center"
+		justifyContent: "space-evenly"
 	},
 	paragraph: {
 		margin: 24,

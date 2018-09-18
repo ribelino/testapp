@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, Image } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator, TabNavigator} from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
@@ -8,6 +8,7 @@ import MessagingScreen from '../screens/MessagingScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import CreateTrip from '../screens/CreateTrip';
 //Imports for HomeTab
+import TripViewDemo from '../screens/HomeFeed/TripView';
 
 //Imports for CreateTrip Tab
 import CalenderDemo from '../screens/TripSequence/calenderPage';
@@ -22,18 +23,17 @@ import createTripPreference from '../screens/TripSequence/createTripPreference';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
+  Profile: ProfileScreen,
+  TripView: TripViewDemo,
 });
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
+    <Image
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+      source={require('../assets/navBarImages/greenHome.png')}
+      style={{width: 35.15, height: 29.84}}
     />
   ),
 };
@@ -45,9 +45,10 @@ const MessageStack = createStackNavigator({
 MessageStack.navigationOptions = {
   tabBarLabel: 'Messages',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
+    <Image
       focused={focused}
-      name={Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link'}
+      source={require('../assets/navBarImages/greenMsg.png')}
+      style={{width: 31.8, height: 22.75}}
     />
   ),
 };
@@ -59,9 +60,10 @@ const ProfileStack = createStackNavigator({
 ProfileStack.navigationOptions = {
   tabBarLabel: 'Profile',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
+    <Image
       focused={focused}
-      name={Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options'}
+      source={require('../assets/navBarImages/greenProfile.png')}
+      style={{width: 18.92, height: 29.65}}
     />
   ),
 };
@@ -79,16 +81,17 @@ const CreateTripStack = createStackNavigator({
 CreateTripStack.navigationOptions = {
   tabBarLabel: 'CreateTrip',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-    focused={focused}
-    name={Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options'}
+    <Image
+      focused={focused}
+      source={require('../assets/navBarImages/greenTrip.png')}
+      style={{width: 29.65, height: 29.65}}
     />
   ),
 };
 
 export default createBottomTabNavigator({
   HomeStack,
+  CreateTripStack,
   MessageStack,
   ProfileStack,
-  CreateTripStack,
 });
